@@ -13,16 +13,30 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - g++-6
-          before_instal:
-            - CC=gcc-6 && CXX=g++-6
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     - os: osx
       osx_image: xcode9.2
+      env:
+        - MATRIX_EVAL=""
+
+before_install:
+    - eval "${MATRIX_EVAL}"
 
 before_script:  
+    - git clone https://github.com/ProfesseurPoire/Cabbages-test
+    - cd Cabbages-test
+    - git checkout develop
     - mkdir build
     - cd build
-    - cmake ..
+    - myvar="$PWD"/cabbages-test
+    - cmake -DCMAKE_INSTALL_PREFIX=./cabbages-test ..
+    - make && make install
+    - cd ../../
+    - mkdir build
+    - cd build
+    - cmake -DCMAKE_INSTALL_PREFIX="$myvar" ..
 
 script: make && ctest -V
