@@ -1,13 +1,15 @@
 @setlocal enableextensions
 @cd /d "%~dp0"
 
+rd /s /q build
+
 for %%i in (x86 x64) do (
 
     setlocal
 
     call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" %%i
     
-    for %%j in (Debug Release RelWithDebInfo) do (
+    for %%j in (Debug Release RelWithDebInfo MinSizeRel) do (
         setlocal
         mkdir build\build%%i\%%j
         cd build\build%%i\%%j
