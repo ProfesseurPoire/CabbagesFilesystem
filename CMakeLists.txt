@@ -8,8 +8,12 @@ else()
     set(arch_suffix "64")
 endif()
 
+set(CMAKE_DEBUG_POSTFIX "-debug")
 
-set(CMAKE_INSTALL_PREFIX "C:/Program Files/${PROJECT_NAME}")
+
+if(WIN32)
+    set(CMAKE_INSTALL_PREFIX "C:/Program Files/${PROJECT_NAME}")
+endif()
 
 set(library_install_directory "lib${arch_suffix}")
 
@@ -39,7 +43,7 @@ include(CMakePackageConfigHelpers)
 # if package pulled by the find_package function is compatible
 # depending on the version asked by the find_package function
 write_basic_package_version_file(
-    ${PROJECT_NAME}-config-version.cmake
+    ${PROJECT_NAME}ConfigVersion.cmake
     VERSION ${PROJECT_VERSION}
     COMPATIBILITY SameMajorVersion)
 
@@ -47,11 +51,10 @@ write_basic_package_version_file(
 # target will be ${PROJECT_NAME}-target, and associates the path
 # on where to find the include,library,archive etc
 install(
-    TARGETS     ${PROJECT_NAME}     
-    EXPORT      ${PROJECT_NAME}-target      #Associates the installed target files with an export thing
-    LIBRARY     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/${CMAKE_BUILD_TYPE}
-    ARCHIVE     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/${CMAKE_BUILD_TYPE}
-    RUNTIME     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/${CMAKE_BUILD_TYPE}
+    EXPORT      ${PROJECT_NAME}-target      #Associates the installed target file
+    LIBRARY     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/
+    ARCHIVE     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/
+    RUNTIME     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/
     INCLUDES    DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/include)
 
 # Generates and install a cmake file containing code to import targets
@@ -65,13 +68,13 @@ install(
     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/cmake
 )
 
-configure_file(cmake/config.cmake.in ${PROJECT_NAME}-config.cmake @ONLY)
+configure_file(cmake/config.cmake.in ${PROJECT_NAME}Config.cmake @ONLY)
 
 # Installs the config and config version file 
 install(
     FILES 
-    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}-config-version.cmake"  
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"  
     DESTINATION lib${arch_suffix}/${PROJECT_NAME}-${PROJECT_VERSION}/cmake
 )
 

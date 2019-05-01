@@ -1,9 +1,9 @@
 #include <cabba/FileSystem.h>
 
-#include <windows.h>
-#include <strsafe.h>
 #include <filesystem>
+#include <stdarg.h>
 #include <string>
+#include <cstring>
 
 #include <fstream>
 
@@ -46,7 +46,7 @@ namespace cabba { namespace filesystem {
         return files;
     }
 
-    bool cabba::filesystem::remove(const char* path)
+    bool remove(const char* path)
     {
         std::error_code error;
 
@@ -55,17 +55,17 @@ namespace cabba { namespace filesystem {
         return (error.value() == 0);
     }
 
-    bool cabba::filesystem::create_directory(const char* path)
+    bool create_directory(const char* path)
     {
         return std::filesystem::create_directory(path);
     }
 
-    void cabba::filesystem::remove_all(const char* path)
+    void remove_all(const char* path)
     {
         std::filesystem::remove_all(path);
     }
 
-    bool cabba::filesystem::exist(const char* path)
+    bool exist(const char* path)
     {
         return std::filesystem::exists(path);
     }
@@ -107,13 +107,13 @@ namespace cabba { namespace filesystem {
 
         // If index equals -1 it means there's nothing before the filename
         if (index == -1)
-            return "";
+            return nullptr;
 
         std::string str = path;
         str = str.substr(0, index + 1);
 
         char* newStr = new char[str.size() + 1];
-        std::strcpy(newStr, str.data());
+        strcpy(newStr, str.data());
 
         return newStr;
     }
@@ -131,11 +131,11 @@ namespace cabba { namespace filesystem {
             {
                 std::string cut = str.substr(i + 1);
                 char* newStr = new char[cut.size()+1];
-                std::strcpy(newStr, cut.data());
+                strcpy(newStr, cut.data());
                 return newStr;
             }
         }
-        return "";
+        return nullptr;
     }
 
     char* extension(const char* path)
@@ -156,7 +156,7 @@ namespace cabba { namespace filesystem {
             }
         }
         char* newStr = new char[ext.size() + 1];
-        std::strcpy(newStr, ext.data());
+        strcpy(newStr, ext.data());
         return newStr;
     }
 
